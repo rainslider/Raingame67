@@ -1,0 +1,26 @@
+# INSTELLINGEN VAN BLAUWDRUK
+# Vul hieronder je eigen gegevens in achter het = teken. Regels met een # ervoor worden genegeerd.
+# Sla het bestand op als instellingen.txt (zelfde naam, zelfde map als server.js).
+
+# De poort waarop de site draait. Meestal laat je dit zo staan.
+PORT=3000
+
+# De naam van je site.
+SITE_NAME=Blauwdruk
+
+# ---------- AI (voor het laten bouwen van games) ----------
+# Je Anthropic API-sleutel van console.anthropic.com. Zonder sleutel werkt de AI niet.
+ANTHROPIC_API_KEY=
+ANTHROPIC_MODEL=claude-sonnet-5-5
+# Hoeveel keer per uur iemand de AI mag gebruiken (houdt je kosten laag).
+AI_PER_HOUR=15
+
+# ---------- PLATFORM ----------
+# Hoeveel games iemand maximaal mag publiceren.
+MAX_GAMES_PER_USER=20
+# Jouw gebruikersnaam (kleine letters). Dan kun jij alle games verwijderen. Meerdere: scheiden met een komma.
+ADMIN_USERNAMES=
+# Zet op 1 als je site achter nginx, Caddy of Cloudflare draait.
+TRUST_PROXY=0
+# Map waar de accounts en games worden bewaard. Maak hier back-ups van.
+DATA_DIR=./data

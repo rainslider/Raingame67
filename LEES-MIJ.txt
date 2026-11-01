@@ -1,0 +1,76 @@
+BLAUWDRUK
+=========
+
+Een blauw platform waar mensen games spelen, met AI games bouwen en publiceren.
+
+Er zitten 4 bestanden in de zip. Ze moeten alle 4 in dezelfde map op je server staan:
+
+  1. LEES-MIJ.txt      dit bestand
+  2. instellingen.txt  hier vul je je AI-sleutel in
+  3. package.json      zegt welk onderdeel er geinstalleerd moet worden
+  4. server.js         de hele website en de server in een bestand
+
+Er zijn geen mappen. De website zelf zit in server.js.
+
+
+WAT HEB JE NODIG
+----------------
+- Hosting waar je Node.js op kunt draaien (versie 18 of nieuwer). Bijvoorbeeld een VPS, Render, Railway of Fly.io.
+  Gewone HTML-hosting of WordPress-hosting werkt NIET, want de site heeft een server nodig.
+- Een Anthropic API-sleutel (voor de AI die games bouwt). Maak er een op console.anthropic.com
+  Een e-mailserver heb je niet nodig.
+
+
+ONLINE ZETTEN
+-------------
+1. Pak de zip uit en zet de 4 bestanden in een map op je server.
+2. Open instellingen.txt en vul in:
+   - ANTHROPIC_API_KEY (de AI)
+   - ADMIN_USERNAMES (jouw gebruikersnaam, dan kun jij games verwijderen)
+3. Ga in die map naar de terminal en typ:
+
+       npm install
+
+   Dit installeert een onderdeel (ws). Je doet dit maar een keer.
+4. Start de site met:
+
+       npm start
+
+   De site draait nu op poort 3000. Om hem aan te laten blijven kun je pm2 gebruiken:
+   npm install -g pm2  en daarna  pm2 start server.js --name blauwdruk
+5. Laat je domein naar de server wijzen en zet HTTPS aan (bijvoorbeeld met Caddy of Let's Encrypt).
+   Draai je de site achter nginx, Caddy of Cloudflare? Zet dan in instellingen.txt: TRUST_PROXY=1
+
+Voorbeeld voor nginx (belangrijk voor multiplayer en het live bouwen met AI):
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+        proxy_read_timeout 300s;
+    }
+
+
+HOE HET WERKT VOOR BEZOEKERS
+----------------------------
+- Plusje rechtsboven: account maken met e-mail, wachtwoord en gebruikersnaam. Het account is meteen klaar.
+- Inloggen kan met het e-mailadres of de gebruikersnaam en het wachtwoord.
+- Via het plusje kies je: een game laten maken door AI (ook multiplayer) of zelf een game schrijven.
+- Publiceren kan pas als je de game hebt getest en hebt aangevinkt dat hij af is.
+
+
+GOED OM TE WETEN
+----------------
+- Er wordt geen e-mail verstuurd. Daardoor wordt het e-mailadres niet gecontroleerd: iemand kan een account maken met
+  een e-mailadres dat niet van hem is. En wie zijn wachtwoord kwijt is, kan niet zelf een nieuw wachtwoord krijgen.
+  In dat geval moet je het account zelf in de map "data" (bestand db.json) verwijderen, zodat die persoon opnieuw kan beginnen.
+- Elke game die de AI bouwt kost geld bij Anthropic. Stel op console.anthropic.com een maandlimiet in.
+- Alle accounts en games staan in de map "data" (die wordt vanzelf aangemaakt). Maak daar regelmatig een back-up van.
+- Games van bezoekers draaien in een afgesloten venster, zonder toegang tot accounts en zonder internet.
+- Je bewaart e-mailadressen van mensen. Zet daarom een privacyverklaring op je site.
+- De opslag is bedoeld voor een klein tot middelgroot platform. Draai maar een exemplaar van de server.
